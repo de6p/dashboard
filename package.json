@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "name": "volcano-dashboard",
     "version": "0.1.0",
     "private": true,
@@ -56,4 +57,28 @@
         "lucide-react": "^0.511.0",
         "react-bootstrap": "^2.10.9"
     }
+=======
+  "name": "volcano-dashboard",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "check-types": "turbo run check-types"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.0",
+    "turbo": "^2.5.4",
+    "typescript": "5.8.2"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "npm@10.9.2",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+>>>>>>> 1acfbc4 (feat/dashboard: add turbo repo for faster build time)
 }
