@@ -96,17 +96,10 @@ export default function PodManagement() {
 
     const { mutateAsync: deletePod, isPending: isDeleting } = trpc.podRouter.deletePod.useMutation({
         onSuccess: async () => {
-            const deletedPodName = podToDelete?.name
             setShowDeleteConfirm(false)
-
             setPodToDelete(null)
             setError(null)
-
-            setTimeout(async () => {
-                await handleRefresh()
-            }, 2000)
-
-            console.log(`Pod "${deletedPodName}" deleted successfully`)
+            await utils.podRouter.getPods.invalidate()
         },
         onError: (error) => {
             setError(t("errors.delete", { message: error.message }))

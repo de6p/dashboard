@@ -26,7 +26,7 @@
     "fetchYamlEdit": "Failed to fetch queue YAML for editing",
     "noYaml": "No YAML configuration available for this queue",
     "delete": "Failed to delete queue: {message}",
-    "rootQueue": "The 'root' queue is a system queue and cannot be deleted."
+    "rootQueue": "The '{name}' queue is a system queue and cannot be deleted."
   },
   "create": {
     "title": "Create a Queue",
@@ -39,9 +39,13 @@
     "guaranteeTitle": "Guarantee Resources (Optional)",
     "guaranteeHelper": "Maps to spec.guarantee.resource (cpu / memory).",
     "capabilityTitle": "Capability Resources (Optional)",
+    "capabilityTitleWithValues": "Capability Resources",
     "capabilityHelper": "Maps to spec.capability.",
+    "capabilityValidationHelper": "Upper limit for deserved. Deserved must be ≤ capability for each resource you set.",
     "deservedTitle": "Deserved Resources (Optional)",
+    "deservedTitleRequired": "Deserved Resources (required when guarantee is set)",
     "deservedHelper": "Maps to spec.deserved (capacity plugin).",
+    "deservedValidationHelper": "Must be ≥ guarantee and ≤ capability for each resource you set.",
     "cpu": "CPU",
     "memory": "Memory",
     "yamlLabel": "Queue YAML Configuration",

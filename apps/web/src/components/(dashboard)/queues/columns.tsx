@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/tooltip"
 import { ColumnDef } from "@tanstack/react-table"
 import { ArrowUpDown, Edit, Filter, Trash2 } from 'lucide-react'
-import { isProtectedQueue, protectedQueueDeleteMessage } from "@/lib/queue-constants"
+import { isProtectedQueue } from "@/lib/queue-constants"
 import { useFormatter, useTranslations } from "next-intl"
 import { QueueStatus } from "./queue-management"
 
@@ -184,8 +184,8 @@ export const createColumns = ({
                                 <TooltipContent>
                                     <p>
                                       {isDeleteDisabled
-                                        ? protectedQueueDeleteMessage(queue.name)
-                                        : "Delete queue"}
+                                        ? t("errors.rootQueue", { name: queue.name })
+                                        : t("delete.deleteTooltip")}
                                     </p>
                                 </TooltipContent>
                             </Tooltip>

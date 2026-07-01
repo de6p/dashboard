@@ -14,12 +14,13 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { usePaginationClamp } from "@/hooks/use-pagination-clamp"
 import { trpc } from "@volcano/trpc/react"
 import { Plus, RefreshCw } from "lucide-react"
+import { useFormatter, useTranslations } from "next-intl"
 import { ListPagination } from "../list-pagination"
 import { useCallback, useEffect, useState } from "react"
 import { DataTable } from "../data-table"
 import { ServerPagination } from "../server-pagination"
 import { useQueueColumns } from "./columns"
-import { isProtectedQueue, protectedQueueDeleteMessage } from "@/lib/queue-constants"
+import { isProtectedQueue } from "@/lib/queue-constants"
 import { CreateQueueDialog } from "./create-queue-dialog"
 import { QueueEditDialog } from "./queue-edit-dialog"
 
@@ -69,23 +70,10 @@ export default function QueueManagement() {
 
     const { mutateAsync: deleteQueue, isPending: isDeleting } = trpc.queueRouter.deleteQueue.useMutation({
         onSuccess: async () => {
-            const deletedQueueName = queueToDelete?.name
             setShowDeleteConfirm(false)
-
-            if (queueToDelete) {
-                setQueues(prevQueues =>
-                    prevQueues?.filter(q => q.name !== queueToDelete.name)
-                )
-            }
-
             setQueueToDelete(null)
             setError(null)
-
-            setTimeout(async () => {
-                await handleRefresh()
-            }, 2000)
-
-            console.log(`Queue "${deletedQueueName}" deleted successfully`)
+            await utils.queueRouter.getQueues.invalidate()
         },
         onError: (error) => {
             let errorMessage = error.message
@@ -95,7 +83,7 @@ export default function QueueManagement() {
                 errorMessage.includes("cannot be delete")
             ) {
                 const queueName = queueToDelete?.name ?? "system"
-                errorMessage = protectedQueueDeleteMessage(queueName)
+                errorMessage = t("errors.rootQueue", { name: queueName })
             } else if (errorMessage.includes('denied the request')) {
                 const match = errorMessage.match(/denied the request: (.+?)(?:"|$)/)
                 if (match && match[1]) {
@@ -131,7 +119,7 @@ export default function QueueManagement() {
 
     const handleDelete = useCallback((queue: QueueStatus) => {
         if (isProtectedQueue(queue.name)) {
-            setError(protectedQueueDeleteMessage(queue.name))
+            setError(t("errors.rootQueue", { name: queue.name }))
             return
         }
         setQueueToDelete(queue)

@@ -38,6 +38,8 @@
     },
     "resourceLabel": "{resource} 资源",
     "allocated": "已分配 {resource}",
-    "capacity": "{resource} 容量"
+    "capacity": "{resource} 容量",
+    "legendAllocated": "已分配",
+    "legendCapacity": "容量"
   }
 }

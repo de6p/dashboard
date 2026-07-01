@@ -95,25 +95,10 @@ export default function JobsManagement() {
 
   const { mutateAsync: deleteJob, isPending: isDeleting } = trpc.jobsRouter.deleteJob.useMutation({
     onSuccess: async () => {
-      const deletedJobName = jobToDelete?.name
       setShowDeleteConfirm(false)
-
-      if (jobToDelete) {
-        setJobs(prevJobs =>
-          prevJobs?.filter(j =>
-            !(j.name === jobToDelete.name && j.namespace === jobToDelete.namespace)
-          )
-        )
-      }
-
       setJobToDelete(null)
       setError(null)
-
-      setTimeout(async () => {
-        await handleRefresh()
-      }, 2000)
-
-      console.log(`Job "${deletedJobName}" deleted successfully`)
+      await utils.jobsRouter.getJobs.invalidate()
     },
     onError: (error) => {
       setError(t("errors.delete", { message: error.message }))

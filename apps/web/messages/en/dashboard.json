@@ -38,6 +38,8 @@
     },
     "resourceLabel": "{resource} Resources",
     "allocated": "{resource} Allocated",
-    "capacity": "{resource} Capacity"
+    "capacity": "{resource} Capacity",
+    "legendAllocated": "Allocated",
+    "legendCapacity": "Capability"
   }
 }

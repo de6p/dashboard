@@ -26,7 +26,7 @@
     "fetchYamlEdit": "获取队列 YAML 用于编辑失败",
     "noYaml": "此队列没有可用的 YAML 配置",
     "delete": "删除队列失败：{message}",
-    "rootQueue": "根队列是系统队列，无法删除。"
+    "rootQueue": "队列「{name}」是系统队列，无法删除。"
   },
   "create": {
     "title": "创建队列",
@@ -39,9 +39,13 @@
     "guaranteeTitle": "保证资源（可选）",
     "guaranteeHelper": "映射到 spec.guarantee.resource（cpu / memory）。",
     "capabilityTitle": "能力资源（可选）",
+    "capabilityTitleWithValues": "能力资源",
     "capabilityHelper": "映射到 spec.capability。",
+    "capabilityValidationHelper": "应得资源的上限。每个已设置资源的应得值必须 ≤ 能力值。",
     "deservedTitle": "应得资源（可选）",
+    "deservedTitleRequired": "应得资源（设置保证资源时为必填）",
     "deservedHelper": "映射到 spec.deserved（capacity 插件）。",
+    "deservedValidationHelper": "每个已设置资源的应得值必须 ≥ 保证值且 ≤ 能力值。",
     "cpu": "CPU",
     "memory": "内存",
     "yamlLabel": "队列 YAML 配置",

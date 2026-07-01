@@ -173,16 +173,19 @@ const QueueResourcesBarChart = ({ data = [], isLoading = false }: QueueResources
       ? "GPU"
       : selectedResource.charAt(0).toUpperCase() + selectedResource.slice(1)
 
-  const chartConfig = {
-    allocated: {
-      label: "Allocated",
-      color: "hsl(var(--chart-1))",
-    },
-    capacity: {
-      label: "Capability",
-      color: "hsl(var(--chart-2))",
-    },
-  }
+  const chartConfig = useMemo(
+    () => ({
+      allocated: {
+        label: t("barChart.legendAllocated"),
+        color: "hsl(var(--chart-1))",
+      },
+      capacity: {
+        label: t("barChart.legendCapacity"),
+        color: "hsl(var(--chart-2))",
+      },
+    }),
+    [t],
+  )
 
   if (isLoading) {
     return <BarChartSkeleton />
