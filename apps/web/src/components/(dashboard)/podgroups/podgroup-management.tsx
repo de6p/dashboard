@@ -27,7 +27,6 @@ import { useCallback, useEffect, useState } from "react"
 import { usePaginationClamp } from "@/hooks/use-pagination-clamp"
 import { ListPagination } from "../list-pagination"
 import { DataTable } from "../data-table"
-import { ServerPagination } from "../server-pagination"
 import { usePodGroupColumns } from "./columns"
 
 export type PodGroupStatus = {

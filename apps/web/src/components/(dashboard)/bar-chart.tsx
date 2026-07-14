@@ -168,11 +168,6 @@ const QueueResourcesBarChart = ({ data = [], isLoading = false }: QueueResources
     }
   }
 
-  const resourceLabel =
-    selectedResource === "nvidia.com/gpu"
-      ? "GPU"
-      : selectedResource.charAt(0).toUpperCase() + selectedResource.slice(1)
-
   const chartConfig = useMemo(
     () => ({
       allocated: {

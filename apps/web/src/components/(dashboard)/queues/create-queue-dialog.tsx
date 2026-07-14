@@ -103,46 +103,6 @@ export function CreateQueueDialog({
     }
   })
 
-  const parseYamlToManifest = React.useCallback((yamlString: string) => {
-    try {
-      const parsed = load(yamlString) as any
-
-      if (!parsed || typeof parsed !== "object") {
-        throw new Error("Invalid YAML: must be an object")
-      }
-
-      const requiredFields = ["apiVersion", "kind", "metadata", "spec"]
-      const missingFields = requiredFields.filter((field) => !(field in parsed))
-
-      if (missingFields.length > 0) {
-        throw new Error(`Missing required fields: ${missingFields.join(", ")}`)
-      }
-
-      if (parsed.kind !== "Queue") {
-        throw new Error('Kind must be "Queue"')
-      }
-
-      if (!parsed.metadata || typeof parsed.metadata !== "object") {
-        throw new Error("Invalid metadata: must be an object")
-      }
-
-      if (!parsed.metadata.name || typeof parsed.metadata.name !== "string") {
-        throw new Error("Missing required field: metadata.name")
-      }
-
-      if (!parsed.spec || typeof parsed.spec !== "object") {
-        throw new Error("Invalid spec: must be an object")
-      }
-
-      return parsed
-    } catch (error) {
-      if (error instanceof YAMLException) {
-        throw new Error(`YAML parsing error: ${error.message}`)
-      }
-      throw error
-    }
-  }, [])
-
   // Form → YAML while on Form tab (YAML stays ready when you switch views)
   React.useEffect(() => {
     if (!open || mode !== "form") return
@@ -359,55 +319,5 @@ export function CreateQueueDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
-}
-
-function ResourceCollapsible({
-  title,
-  pair,
-  onChange,
-  disabled,
-  helper
-}: {
-  title: string
-  pair: ResourcePair
-  onChange: (p: ResourcePair) => void
-  disabled: boolean
-  helper: string
-}) {
-  const [open, setOpen] = React.useState(false)
-  return (
-    <Collapsible open={open} onOpenChange={setOpen}>
-      <CollapsibleTrigger
-        className="flex w-full items-center justify-between rounded-md border border-border bg-muted/40 px-3 py-2 text-sm font-medium hover:bg-muted/60"
-        type="button"
-      >
-        {title}
-        <ChevronDown className={cn("h-4 w-4 shrink-0 transition-transform", open && "rotate-180")} />
-      </CollapsibleTrigger>
-      <CollapsibleContent className="space-y-3 border border-t-0 border-border rounded-b-md p-3">
-        <p className="text-xs text-muted-foreground">{helper}</p>
-        <div className="grid grid-cols-2 gap-3">
-          <div className="space-y-1">
-            <Label className="text-xs">CPU</Label>
-            <Input
-              placeholder='e.g. "2"'
-              value={pair.cpu}
-              onChange={(e) => onChange({ ...pair, cpu: e.target.value })}
-              disabled={disabled}
-            />
-          </div>
-          <div className="space-y-1">
-            <Label className="text-xs">Memory</Label>
-            <Input
-              placeholder="e.g. 4Gi"
-              value={pair.memory}
-              onChange={(e) => onChange({ ...pair, memory: e.target.value })}
-              disabled={disabled}
-            />
-          </div>
-        </div>
-      </CollapsibleContent>
-    </Collapsible>
   )
 }
