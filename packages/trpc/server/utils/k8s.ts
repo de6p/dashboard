@@ -46,13 +46,17 @@ function getClients() {
 }
 
 export const k8sApi = new Proxy({} as CustomObjectsApi, {
-    get(_target, prop, receiver) {
-        return Reflect.get(getClients().k8sApi, prop, receiver);
+    get(_target, prop) {
+        const client = getClients().k8sApi;
+        const value = Reflect.get(client, prop);
+        return typeof value === "function" ? value.bind(client) : value;
     },
 });
 
 export const k8sCoreApi = new Proxy({} as CoreV1Api, {
-    get(_target, prop, receiver) {
-        return Reflect.get(getClients().k8sCoreApi, prop, receiver);
+    get(_target, prop) {
+        const client = getClients().k8sCoreApi;
+        const value = Reflect.get(client, prop);
+        return typeof value === "function" ? value.bind(client) : value;
     },
 });

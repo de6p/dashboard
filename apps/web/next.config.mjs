@@ -10,7 +10,7 @@ const nextConfig = {
     experimental: {
         outputFileTracingRoot: repoRoot,
         outputFileTracingIncludes: {
-            "/api/trpc/[trpc]": ["./examples/cluster-samples/**/*"],
+            "/api/trpc/[trpc]": ["../../examples/cluster-samples/**/*"],
         },
     },
 };

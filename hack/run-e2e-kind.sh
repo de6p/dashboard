@@ -39,10 +39,17 @@ kind load docker-image "${IMAGE_TAG}" --name "${CLUSTER_NAME}"
 
 echo "Deploying volcano dashboard..."
 kubectl create ns volcano-system --dry-run=client -o yaml | kubectl apply -f -
-kubectl apply -f "${ROOT}/deployment/volcano-dashboard.yaml"
-kubectl -n volcano-system set image deploy/volcano-dashboard \
-    volcano-dashboard="${IMAGE_TAG}"
-kubectl -n volcano-system rollout status deploy/volcano-dashboard --timeout=300s
+sed -e "s|image: volcanosh/volcano-dashboard:.*|image: ${IMAGE_TAG}|" \
+    -e "s|imagePullPolicy: IfNotPresent|imagePullPolicy: Never|" \
+    "${ROOT}/deployment/volcano-dashboard.yaml" | kubectl apply -f -
+if ! kubectl -n volcano-system rollout status deploy/volcano-dashboard --timeout=300s; then
+    echo "Dashboard deployment failed; collecting diagnostics..." >&2
+    kubectl -n volcano-system get pods -l app=volcano-dashboard -o wide >&2 || true
+    kubectl -n volcano-system describe deploy/volcano-dashboard >&2 || true
+    kubectl -n volcano-system describe pods -l app=volcano-dashboard >&2 || true
+    kubectl -n volcano-system logs -l app=volcano-dashboard --tail=200 >&2 || true
+    exit 1
+fi
 
 echo "Installing sample cluster resources..."
 kubectl apply -f "${ROOT}/examples/cluster-samples/"
@@ -96,4 +103,5 @@ fi
 
 echo "Dashboard smoke test passed."
 
-bash "${ROOT}/hack/smoke-test-dashboard.sh"
+echo "Running API smoke checks..."
+BASE_URL="http://127.0.0.1:${PORT_FORWARD_PORT}" bash "${ROOT}/hack/smoke-test-dashboard.sh"
